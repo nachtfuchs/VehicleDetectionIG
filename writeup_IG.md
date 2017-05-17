@@ -37,7 +37,7 @@ You're reading it!
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in the lines # through # of the file called `VehicleDetectionFunctions.py`. There the function "get_hog_features()" extracts the histogram of gradients using the cv2-function "hog()".
+The code for this step is contained in the lines TODO through TODO of the file called `VehicleDetectionFunctions.py`. There the function "get_hog_features()" extracts the histogram of gradients using the cv2-function "hog()".
 In order to get a feeling with the different function arguments in hog(), I used the "src.py" file to read in images and non-vehicle images and apply the function with different parameters.
 
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
@@ -51,19 +51,22 @@ Here is an example using the `YCrCb` color space and HOG parameters of `orientat
 
 ![alt text][image2]
 
-####2. Explain how you settled on your final choice of HOG parameters.
+#### 2. Explain how you settled on your final choice of HOG parameters.
 
-I tried various combinations of parameters and...
+I tried various combinations of parameters and figured that orient = 9, pix_per_cell = 8, cell_per_block = 2, and the HSV color space are the parameters that work the best for me. Using orient = 9 I had enough directions to represent the shape of a vehicle. With pix_per_cell = 8 there are enough cells to see a shape similar to a car within the shape by human eye, which I believe is better to use for the machine. That might be a false deduction :-) The HSV color space provides the S channel that showed distinct features within the lessons for cars.
 
-####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
+#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using...
+I trained a linear SVM using the SVC classifier from line TODO to line TODO. First of all, I used only the HOG features. Using the "extract_features()" function from 'VehicleDetectionFunctions.py' I accumulated the features for a subset of 1000 for each car and non-car images.
+In the next step, I used the standard scaler to normalize the features in lines TODO-TODO. Using the normalized features, the subset of data was split into training and 10% validation samples. The actual training was performed in line TODO (svc.fit(X_train, y_train)). In order to figure out the achieved accuracy I used the score()-method in line TODO(svc.score(X_test, y_test)).
 
-###Sliding Window Search
+### Sliding Window Search
 
 ####1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+Using the "slide_window()" function from 'VehicleDetectionFunctions.py' that was used from the lesson, I received the windows of interest in line TODO (slide_window()). The function uses different window sizes and overlaps to search create windows on the input image. I decided that I want to identify vehicle close, mid and far away from the ego vehicle. Using the software GIMP I found out that window sizes of (92, 92) for far distanced, (144, 144) for mid distanced, and (256, 256) for close distanced vehicles is a reasonable choice.
+For the overlap I thought that a dense map of windows is a good approach to detect man vehicles, so I chose an overlap of 80%. It takes more calculation time, but my goal is to have a good identificiation performance which should be better with many windows.
+Once I received the window coordinations, I used the search_windows()-function in line TODO (hot_windows = search_windows) to classify the windows as cars or non-cars. The underlying function is "single_img_features()"
 
 ![alt text][image3]
 
