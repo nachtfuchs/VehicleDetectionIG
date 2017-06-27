@@ -83,7 +83,6 @@ As it turned out, my choice of parameters for the HOG parameters did not work we
 Here are some example images:
 
 ![alt text][image4]
-As you see, there are still some false positives but that could be handled by the heat map approach.
 ---
 
 ### Video Implementation
