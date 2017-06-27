@@ -37,7 +37,7 @@ You're reading it!
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in the lines TODO through TODO of the file called `VehicleDetectionFunctions.py`. There the function "get_hog_features()" extracts the histogram of gradients using the cv2-function "hog()".
+The code for this step is contained in the lines 22 through 42 of the file called `VehicleDetectionFunctions.py`. There the function "get_hog_features()" extracts the histogram of gradients using the cv2-function "hog()".
 In order to get a feeling with the different function arguments in hog(), I used the "src.py" file to read in images and non-vehicle images and apply the function with different parameters.
 
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
@@ -58,16 +58,16 @@ As observed below in Rubric 2 for sliding window search, the parameters turned o
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using the SVC classifier from line TODO to line TODO. First of all, I used only the HOG features. Using the "extract_features()" function from 'VehicleDetectionFunctions.py' I accumulated the features for a subset of 1000 for each car and non-car images.
-In the next step, I used the standard scaler to normalize the features in lines TODO-TODO. Using the normalized features, the subset of data was split into training and 10% validation samples. The actual training was performed in line TODO (svc.fit(X_train, y_train)). In order to figure out the achieved accuracy I used the score()-method in line TODO(svc.score(X_test, y_test)).
+I trained a linear SVM using the SVC classifier from line 114 to line 117. First of all, I used only the HOG features. Using the "extract_features()" function from 'VehicleDetectionFunctions.py' I accumulated the features for a subset of 1000 for each car and non-car images.
+In the next step, I used the standard scaler to normalize the features in lines 99 (file: src.py). Using the normalized features, the subset of data was split into training and 10% validation samples. The actual training was performed in line 114 (svc.fit(X_train, y_train); file: src.py). In order to figure out the achieved accuracy I used the score()-method in line 120 (svc.score(X_test, y_test); file: src.py).
 
 ### Sliding Window Search
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-Using the "slide_window()" function from 'VehicleDetectionFunctions.py' that was used from the lesson, I received the windows of interest in line TODO (slide_window()). The function uses different window sizes and overlaps to create windows on the input image. I decided that I want to identify vehicle close, mid and far away from the ego vehicle. Using the software GIMP I found out that window sizes of (92, 92) for far-distanced, (144, 144) for mid-distanced, and (256, 256) for close-distanced vehicles is a reasonable choice.
+Using the "slide_window()" function from 'VehicleDetectionFunctions.py' that was used from the lesson, I received the windows of interest in line 215 (slide_window()). The function uses different window sizes and overlaps to create windows on the input image. I decided that I want to identify vehicle close, mid and far away from the ego vehicle. Using the software GIMP I found out that window sizes of (92, 92) for far-distanced, (144, 144) for mid-distanced, and (256, 256) for close-distanced vehicles is a reasonable choice.
 For the overlap I thought that a dense map of windows is a good approach to detect vehicles, so I chose an overlap of 80%. It takes more calculation time, but my goal is to have a good identification performance which should be better with many windows.
-Once I received the window coordinates, I used the search_windows()-function in line TODO (hot_windows = search_windows) to classify the windows as cars or non-cars. The underlying function is "single_img_features()". It uses the image features and assigns them to the trained classifier in the above rubric. The classifier performs a prediction on the image features in line TODO(clf.predict(test_features)) in file "VehicleDetectionFunctions.py".
+Once I received the window coordinates, I used the search_windows()-function in line 148(hot_windows = search_windows; file: src.py) to classify the windows as cars or non-cars. The underlying function is "single_img_features()". It uses the image features and assigns them to the trained classifier in the above rubric. The classifier performs a prediction on the image features in line 278 (clf.predict(test_features)) in file "VehicleDetectionFunctions.py".
 
 ![alt text][image3]
 
